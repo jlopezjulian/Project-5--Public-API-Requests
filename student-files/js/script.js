@@ -14,7 +14,6 @@ FETCH FUNCTIONS-------------
 */
 
 const urlAPI = "https://randomuser.me/api/?results=12&nat=US&inc=picture,name,email,cell,dob,location&noinfo";
-//console.log(urlAPI);
 
 fetch(urlAPI)
     .then(checkStatus)
@@ -69,7 +68,57 @@ function displayEmployees(employees) {
     gallery.insertAdjacentHTML("beforeend", employeeHTML); // this technique will allow HTML strings to be added without disrupting the DOM
   }
 }
+/**
+* displayModal function creates a template literal for which the html string will be added to the div element and display the employee information when it is clicked and added to the body element 
+* an expression is written destructuring the data object and holding the property value in a variable - referencing https://www.freecodecamp.org/news/javascript-object-destructuring-spread-operator-rest-parameter/
+* a date variable is created to hold a Date Constructor 
+* a template literal is created referencing Index.html lines 74-86
+* a getMonth(), getData, getFullYear() method is added to the birthday line 97 referencing the newly created date variable - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/getMonth
+*/
+const body = document.querySelector('body');
 
+function displayModal(index) {
+  const {picture, name, email, cell, dob, location :{city, street, state, postcode}} = employees[index]; 
+  let date = new Date(dob.date); 
+  let formattedBirthday = date.getMonth()/date.getDate()/date.getFullYear()
+
+  const modalHTML = `
+  <div class="modal-container">
+      <div class="modal">
+      <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+      <div class="modal-info-container">
+          <img class="modal-img" src="${picture.large}" alt="profile picture">
+          <h3 id="name" class="modal-name cap">${name.first} ${name.last}</h3>
+          <p class="modal-text">${email}</p>
+          <p class="modal-text cap">${city}</p>
+          <hr>
+          <p class="modal-text">${cell}</p>
+          <p class="modal-text">${street.number} ${street.name}, ${city}, ${state}, ${postcode}</p>
+          <p class="modal-text">Birthday: ${formattedBirthday}</p>
+      </div>
+  </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', modalHTML); 
+  
+  const modalClose = document.getElementById('modal-close-btn'); 
+// if the modalClose button is clicked, the modal that appears is closed 
+  modalClose.addEventListener('click', (e) =>{ 
+    document.body.removeChild(document.body.lastElementChild);
+  });
+  };
+/**
+ * EVENT LISTENERS----
+ */
+
+
+//If the employee card is clicked, a modal appears with the following information (picture, name, email, cell, dob, location( city, street, state, postcode))
+gallery.addEventListener('click', (e) => {
+  const card = e.target.closest('.card');
+  const index = card.getAttribute('data-index');
+  currentModalIndex = index;
+  displayModal(currentModalIndex)
+  });
 
 
 
