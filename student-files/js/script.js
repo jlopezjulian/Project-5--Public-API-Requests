@@ -80,7 +80,8 @@ const body = document.querySelector('body');
 function displayModal(index) {
   const {picture, name, email, cell, dob, location :{city, street, state, postcode}} = employees[index]; 
   let date = new Date(dob.date); 
-  let formattedBirthday = date.getMonth()/date.getDate()/date.getFullYear()
+  const birthday = `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`
+
 
   const modalHTML = `
   <div class="modal-container">
@@ -94,7 +95,7 @@ function displayModal(index) {
           <hr>
           <p class="modal-text">${cell}</p>
           <p class="modal-text">${street.number} ${street.name}, ${city}, ${state}, ${postcode}</p>
-          <p class="modal-text">Birthday: ${formattedBirthday}</p>
+          <p class="modal-text">Birthday: ${birthday} </p>
       </div>
   </div>
   `;
